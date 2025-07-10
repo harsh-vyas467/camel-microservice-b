@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ActiveMqReceiverRouter extends RouteBuilder {
+public class ActiveMqXmlReceiverRouter extends RouteBuilder {
 
     @Autowired
     MyCurrencyExchangeProcessor myCurrencyExchangeProcessor;
@@ -19,11 +19,9 @@ public class ActiveMqReceiverRouter extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        from("activemq:my-activemq-queue")
+        from("activemq:my-activemq-xml-queue")
                 .unmarshal()
-                .json(JsonLibrary.Jackson, CurrencyExchange.class)
-                .bean(myCurrencyExchangeProcessor)
-                .bean(myCurrencyExchangeTransformer)
+                .jacksonXml(CurrencyExchange.class)
                 .to("log:received-message-from-active-mq");
 
     }
